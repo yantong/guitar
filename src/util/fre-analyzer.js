@@ -17,7 +17,7 @@ const noteStrings = [
 const AllFres = [];
 
 for (let index = 1; index <= 12 * 9; index++) {
-  let fre = A / 2 ** ((IndexA - index - 2) / 12);
+  let fre = A / 2 ** ((IndexA - index - 1) / 12);
   let name = noteStrings[index % 12];
 
   AllFres.push({
