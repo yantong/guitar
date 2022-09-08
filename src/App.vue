@@ -1,26 +1,51 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="wrapper">
+    <scale :seledFre="seledFre"></scale>
+  </div>
+  <button ref="startButton" @click="start" class="start-button"></button>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NoteAnalyzer from "./util/note-analyzer";
+import FreAnalyzer from "./util/fre-analyzer";
+import Scale from "./components/scale.vue";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: { Scale },
+  data() {
+    return {
+      noteAnalyzer: null,
+      seledFre: null,
+    };
+  },
+  mounted() {
+    this.noteAnalyzer = new NoteAnalyzer({
+      callback: (freq) => {
+        this.seledFre = FreAnalyzer(freq);
+      },
+    });
+    this.$refs.startButton.click();
+  },
+  beforeUnmount() {
+    this.noteAnalyzer.stop();
+  },
+  methods: {
+    start() {
+      this.noteAnalyzer.start();
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-button {
+  display: none;
 }
 </style>
