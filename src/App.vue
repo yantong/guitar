@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <scale :seledFre="seledFre"></scale>
+    <span>{{ seledFre && seledFre.name }}</span>
   </div>
   <button ref="startButton" @click="start" class="start-button"></button>
 </template>

@@ -1,5 +1,5 @@
 const A = 440.0;
-const IndexA = 10;
+const IndexA = 12 * 5 - 2;
 const noteStrings = [
   "C",
   "C♯",
@@ -16,23 +16,14 @@ const noteStrings = [
 ];
 const AllFres = [];
 
-for (let index = -4; index <= 4; index++) {
-  let standardA = index >= 0 ? A * 2 ** index : A / 2 ** -index;
-  let fres = [];
+for (let index = 1; index <= 12 * 9; index++) {
+  let fre = A / 2 ** ((IndexA - index - 2) / 12);
+  let name = noteStrings[index % 12];
 
-  for (let j = 1; j <= 12; j++) {
-    let fre = standardA / 2 ** ((IndexA - j) / 12);
-
-    fres.push({
-      fre,
-      name: noteStrings[j - 1].replace(
-        noteStrings[j - 1][0],
-        noteStrings[j - 1][0] + (index + 4)
-      ),
-    });
-  }
-
-  AllFres.push(...fres);
+  AllFres.push({
+    fre,
+    name: name.replace(name[0], name[0] + parseInt(index / 12)),
+  });
 }
 
 export default (fre) => {
@@ -52,9 +43,9 @@ export default (fre) => {
   if (minDisIndex == 0) {
     left = 0;
   } else {
-    left =
-      AllFres[minDisIndex].fre -
-      (AllFres[minDisIndex].fre - AllFres[minDisIndex - 1].fre) / 2;
+    left = AllFres[minDisIndex - 1].fre;
+    // AllFres[minDisIndex].fre -
+    // (AllFres[minDisIndex].fre - AllFres[minDisIndex - 1].fre) / 2;
   }
 
   if (minDisIndex == AllFres.length - 1) {
@@ -62,9 +53,9 @@ export default (fre) => {
       AllFres[minDisIndex].fre +
       (AllFres[minDisIndex].fre - AllFres[minDisIndex - 1].fre) / 2;
   } else {
-    right =
-      AllFres[minDisIndex].fre +
-      (AllFres[minDisIndex + 1].fre - AllFres[minDisIndex].fre) / 2;
+    right = AllFres[minDisIndex + 1].fre;
+    // AllFres[minDisIndex].fre +
+    // (AllFres[minDisIndex + 1].fre - AllFres[minDisIndex].fre) / 2;
   }
 
   let seledNote = {

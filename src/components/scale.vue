@@ -29,6 +29,7 @@ export default {
 
       scale.width = this.width;
 
+      ctx.restore();
       ctx.translate(...center);
       ctx.rotate(Math.PI);
       for (let i = 1; i <= 180; i++) {
@@ -39,34 +40,35 @@ export default {
         i > 1 && ctx.rotate(Math.PI / 180);
         ctx.moveTo(r - 10, 0);
         ctx.lineTo(r - (i % 10 == 0 ? 30 : 20), 0);
-        if (i >= 40 && i <= 140 && i % 2 == 0) ctx.stroke();
+        if (i >= 40 && i <= 140 ) ctx.stroke();
       }
 
       let { freRange, cur } = seledFre;
       let Rate;
+      let angle;
 
       if (cur) {
-        if (cur <= freRange[1]) {
-          Rate = (cur - freRange[0]) / (freRange[1] - freRange[0]) / 2;
+        if (cur >= freRange[1]) {
+          Rate = (cur - freRange[1]) / (freRange[2] - freRange[1]) / 2 + 0.5;
         } else {
-          Rate = (freRange[2] - freRange[1]) / (cur - freRange[1]) / 2 + 0.5;
+          Rate = (cur - freRange[0]) / (freRange[1] - freRange[0]) / 2;
         }
       }
 
+      if (cur) {
+        angle = (Math.PI * 40) / 180 + (Math.PI / 180) * parseInt(Rate * 100);
+      } else {
+        angle = 0;
+      }
+
       ctx.restore();
-    //   ctx.rotate(Math.PI);
       ctx.beginPath();
       ctx.strokeStyle = "#f00";
       ctx.lineWidth = 1;
-      //   ctx.rotate(
-      // cur ? 0 : (Math.PI * 40) / 180 + (Math.PI / 180) * parseInt(Rate * 100)
-      //   );
-      ctx.rotate(Math.PI / 2* 3);
+      ctx.rotate(Math.PI + angle);
       ctx.moveTo(r - 10, 0);
       ctx.lineTo(0, 0);
       ctx.stroke();
-
-      console.log(Rate);
     },
   },
   mounted() {
