@@ -1,4 +1,5 @@
 import Pitchfinder from "pitchfinder";
+import { throttle } from "./util";
 
 export default class Analyzer {
   constructor(config) {
@@ -20,7 +21,7 @@ export default class Analyzer {
         const bufferSize = 4096;
         const detectPitch = new Pitchfinder.AMDF({
           maxFrequency: 800,
-          minFrequency: 50,
+          minFrequency: 10,
         });
 
         this.stream = stream;
@@ -34,7 +35,7 @@ export default class Analyzer {
 
         this.recorder.connect(this.context.destination);
         this.audioInput.connect(this.recorder);
-        this.recorder.onaudioprocess = (e) => {
+        this.recorder.onaudioprocess = throttle((e) => {
           const pitch = detectPitch(
             new Float32Array(e.inputBuffer.getChannelData(0).buffer)
           );
@@ -43,7 +44,7 @@ export default class Analyzer {
 
             this.callback(freq);
           }
-        };
+        }, 100);
       });
   }
 
